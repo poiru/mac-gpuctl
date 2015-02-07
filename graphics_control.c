@@ -16,6 +16,18 @@ enum
   graphics_control_method_get_mux_state = 3
 };
 
+enum
+{
+  // Param: 0
+  mux_force_gpu_switch = 2,
+
+  // Param: 0 to disable, 1 to enable.
+  mux_set_dynamic_switching = 4,
+
+  // Param: 0
+  mux_get_graphics_card = 7
+};
+
 io_connect_t connect_graphics_control()
 {
   kern_return_t kr = KERN_SUCCESS;
@@ -62,7 +74,8 @@ void close_graphics_control(io_connect_t io_connect)
   }
 }
 
-bool set_graphics_mux_state(io_connect_t connect, uint32_t action, uint64_t arg)
+static bool set_graphics_mux_state(io_connect_t connect, uint32_t action,
+                                   uint64_t arg)
 {
     kern_return_t kr = KERN_SUCCESS;
     uint64_t scalarI_64[3] = { 1, (uint64_t)action, arg };
@@ -72,7 +85,8 @@ bool set_graphics_mux_state(io_connect_t connect, uint32_t action, uint64_t arg)
     return kr == KERN_SUCCESS;
 }
 
-bool get_graphics_mux_state(io_connect_t connect, uint32_t input, uint64_t* output)
+static bool get_graphics_mux_state(io_connect_t connect, uint32_t input,
+                                   uint64_t* output)
 {
   kern_return_t kr = KERN_SUCCESS;
   uint32_t outputCount = 1;
@@ -81,6 +95,17 @@ bool get_graphics_mux_state(io_connect_t connect, uint32_t input, uint64_t* outp
                                  graphics_control_method_get_mux_state,
                                  scalarI_64, 2, output, &outputCount);
   return kr == KERN_SUCCESS;
+}
+
+bool force_graphics_switch(io_connect_t connect)
+{
+    return set_graphics_mux_state(connect, mux_force_gpu_switch, 0);
+}
+
+bool set_dynamic_graphics_switching(io_connect_t connect, bool enable)
+{
+    return set_graphics_mux_state(connect, mux_set_dynamic_switching,
+                                  (uint64_t)enable);
 }
 
 bool is_using_integrated_graphics(io_connect_t connect)

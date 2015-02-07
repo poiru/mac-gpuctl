@@ -17,13 +17,13 @@ int main(int argc, char* argv[])
   // switching. An option to force the discrete GPU would be nice.
 
   if (!is_using_integrated_graphics(connect)) {
-    set_graphics_mux_state(connect, mux_force_gpu_switch, 0);
+    force_graphics_switch(connect);
 
     // Wait 100ms and then try to disable GPU switching every 10ms.
     usleep(1000 * 100);
     for (int i = 0; i < 50; ++i) {
       if (is_using_integrated_graphics(connect)) {
-        set_graphics_mux_state(connect, mux_set_dynamic_switching, 0);
+        set_dynamic_graphics_switching(connect, false);
         break;
       }
       usleep(1000 * 10);
