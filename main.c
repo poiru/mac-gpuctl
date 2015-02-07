@@ -4,6 +4,9 @@
 // file may not be copied, modified, or distributed except according to those
 // terms.
 
+#include <stdio.h>
+#include <string.h>
+
 #include "graphics_control.h"
 
 int main(int argc, char* argv[])
@@ -13,21 +16,29 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  // TODO: Right now, this just forces the integrated GPU and disables GPU
-  // switching. An option to force the discrete GPU would be nice.
+  if (argc == 1) {
+    puts("gpuctl: usage: [--force-integrated | --force-discrete]");
+    return 1;
+  } else if (argc > 2) {
+    puts("gpuctl: Too many option");
+    return 1;
+  }
 
-  if (!is_using_integrated_graphics(connect)) {
+  bool force_integrated = false;
+  const char* opt = argv[1];
+  if (strcmp(opt, "--force-integrated") == 0) {
+    force_integrated = true;
+  } else if (strcmp(opt, "--force-discrete") == 0) {
+    force_integrated = false;
+  } else {
+    puts("gpuctl: Invalid option");
+    return 1;
+  }
+
+  set_dynamic_graphics_switching(connect, false);
+
+  if (is_using_integrated_graphics(connect) != force_integrated) {
     force_graphics_switch(connect);
-
-    // Wait 100ms and then try to disable GPU switching every 10ms.
-    usleep(1000 * 100);
-    for (int i = 0; i < 50; ++i) {
-      if (is_using_integrated_graphics(connect)) {
-        set_dynamic_graphics_switching(connect, false);
-        break;
-      }
-      usleep(1000 * 10);
-    }
   }
 
   close_graphics_control(connect);
