@@ -16,7 +16,8 @@ const char* usage =
   "\n"
   "  --dynamic           Use dynamic GPU switching\n"
   "  --force-integrated  Force integrated GPU and disable dynamic switching\n"
-  "  --force-discrete    Force discrete GPU and disable dynamic switching\n";
+  "  --force-discrete    Force discrete GPU and disable dynamic switching\n"
+  "  --stat              Print information about current status\n";
 
 int main(int argc, char* argv[])
 {
