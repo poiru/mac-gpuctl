@@ -18,14 +18,23 @@ enum
 
 enum
 {
-  // Param: 0
-  mux_force_gpu_switch = 2,
+  mux_set_disable_feature = 0,
 
-  // Param: 0 to disable, 1 to enable.
+  mux_set_enable_feature = 1,
+
+  mux_set_force_gpu_switch = 2,
+
+  // 0: disable, 1: enable.
   mux_set_dynamic_switching = 4,
 
-  // Param: 0
+  // 0: immediate switches, 2: switch-after-logout.
+  mux_set_switch_policy = 5,
+
   mux_get_graphics_card = 7
+};
+
+enum {
+  mux_feature_policy = 0
 };
 
 io_connect_t connect_graphics_control()
@@ -97,15 +106,21 @@ static bool get_graphics_mux_state(io_connect_t connect, uint32_t input,
   return kr == KERN_SUCCESS;
 }
 
-bool force_graphics_switch(io_connect_t connect)
+void force_graphics_switch(io_connect_t connect)
 {
-    return set_graphics_mux_state(connect, mux_force_gpu_switch, 0);
+    set_graphics_mux_state(connect, mux_set_force_gpu_switch, 0);
+
 }
 
-bool set_dynamic_graphics_switching(io_connect_t connect, bool enable)
+void set_dynamic_graphics_switching(io_connect_t connect, bool enable)
 {
-    return set_graphics_mux_state(connect, mux_set_dynamic_switching,
-                                  (uint64_t)enable);
+    set_graphics_mux_state(connect, mux_set_switch_policy,
+                           enable ? 0 : 2);
+    set_graphics_mux_state(connect, mux_set_dynamic_switching,
+                           (uint64_t)enable);
+    set_graphics_mux_state(connect,
+                           enable ? mux_set_enable_feature : mux_set_disable_feature,
+                           1 << mux_feature_policy);
 }
 
 bool is_using_integrated_graphics(io_connect_t connect)
