@@ -9,6 +9,15 @@
 
 #include "graphics_control.h"
 
+const char* usage =
+  "gpuctl: usage: [OPTION]\n"
+  "\n"
+  "OPTIONS\n"
+  "\n"
+  "  --dynamic           Use dynamic GPU switching\n"
+  "  --force-integrated  Force integrated GPU and disable dynamic switching\n"
+  "  --force-discrete    Force discrete GPU and disable dynamic switching\n";
+
 int main(int argc, char* argv[])
 {
   io_connect_t connect = connect_graphics_control();
@@ -17,10 +26,10 @@ int main(int argc, char* argv[])
   }
 
   if (argc == 1) {
-    puts("gpuctl: usage: [--dynamic | --force-integrated | --force-discrete]");
-    return 1;
+    puts(usage);
+    return 0;
   } else if (argc > 2) {
-    puts("gpuctl: Too many option");
+    puts("gpuctl: Too many options");
     return 1;
   }
 
@@ -45,6 +54,8 @@ int main(int argc, char* argv[])
     set_dynamic_graphics_switching(connect, true);
   } else {
     puts("gpuctl: Invalid option");
+    puts(usage);
+    return 1;
   }
 
   close_graphics_control(connect);
