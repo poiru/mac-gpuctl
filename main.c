@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
   }
 
   if (argc == 1) {
-    puts("gpuctl: usage: [--force-integrated | --force-discrete]");
+    puts("gpuctl: usage: [--dynamic | --force-integrated | --force-discrete]");
     return 1;
   } else if (argc > 2) {
     puts("gpuctl: Too many option");
@@ -41,6 +41,8 @@ int main(int argc, char* argv[])
     if (is_using_integrated_graphics(connect)) {
       force_graphics_switch(connect);
     }
+  } else if (strcmp(opt, "--dynamic") == 0) {
+    set_dynamic_graphics_switching(connect, true);
   } else {
     puts("gpuctl: Invalid option");
   }
