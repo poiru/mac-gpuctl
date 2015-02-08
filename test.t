@@ -46,18 +46,6 @@ Switching from discrete to dynamic should work.
   GPU: integrated
   Dynamic: true
 
-Switching from dynamic to integrated should work.
-
-  $ $GPUCTL --dynamic
-  $ sleep 1 && $GPUCTL --stat
-  GPU: integrated
-  Dynamic: true
-
-  $ $GPUCTL --force-integrated
-  $ sleep 1 && $GPUCTL --stat
-  GPU: integrated
-  Dynamic: false
-
 Switching from dynamic to discrete should work.
 
   $ $GPUCTL --dynamic
@@ -68,4 +56,16 @@ Switching from dynamic to discrete should work.
   $ $GPUCTL --force-discrete
   $ sleep 1 && $GPUCTL --stat
   GPU: discrete
+  Dynamic: false
+
+Switching from dynamic to integrated should work.
+
+  $ $GPUCTL --dynamic
+  $ sleep 1 && $GPUCTL --stat
+  GPU: integrated
+  Dynamic: true
+
+  $ $GPUCTL --force-integrated
+  $ sleep 1 && $GPUCTL --stat
+  GPU: integrated
   Dynamic: false
