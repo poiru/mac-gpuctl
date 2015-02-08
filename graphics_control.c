@@ -26,6 +26,7 @@ enum
 
   // 0: disable, 1: enable.
   mux_set_dynamic_switching = 4,
+  mux_get_dynamic_switching = 4,
 
   // 0: immediate switches, 2: switch-after-logout.
   mux_set_switch_policy = 5,
@@ -110,6 +111,13 @@ void force_graphics_switch(io_connect_t connect)
 {
     set_graphics_mux_state(connect, mux_set_force_gpu_switch, 0);
 
+}
+
+bool is_dynamic_graphics_switching(io_connect_t connect)
+{
+    uint64_t output = 0;
+    get_graphics_mux_state(connect, mux_set_dynamic_switching, &output);
+    return output != 0;
 }
 
 void set_dynamic_graphics_switching(io_connect_t connect, bool enable)

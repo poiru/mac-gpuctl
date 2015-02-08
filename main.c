@@ -52,6 +52,11 @@ int main(int argc, char* argv[])
     }
   } else if (strcmp(opt, "--dynamic") == 0) {
     set_dynamic_graphics_switching(connect, true);
+  } if (strcmp(opt, "--stat") == 0) {
+    printf("GPU: %s\n",
+           is_using_integrated_graphics(connect) ? "integrated" : "discrete");
+    printf("Dynamic: %s\n",
+           is_dynamic_graphics_switching(connect) ? "true" : "false");
   } else {
     puts("gpuctl: Invalid option");
     puts(usage);

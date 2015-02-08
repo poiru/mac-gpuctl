@@ -13,6 +13,7 @@ io_connect_t connect_graphics_control();
 void close_graphics_control(io_connect_t io_connect);
 
 void force_graphics_switch(io_connect_t connect);
+bool is_dynamic_graphics_switching(io_connect_t connect);
 void set_dynamic_graphics_switching(io_connect_t connect, bool enable);
 bool is_using_integrated_graphics(io_connect_t connect);
 
