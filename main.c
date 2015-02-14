@@ -21,11 +21,6 @@ const char* usage =
 
 int main(int argc, char* argv[])
 {
-  io_connect_t connect = connect_graphics_control();
-  if (connect == IO_OBJECT_NULL) {
-    return 1;
-  }
-
   if (argc == 1) {
     puts(usage);
     return 0;
@@ -34,6 +29,12 @@ int main(int argc, char* argv[])
     return 1;
   }
 
+  io_connect_t connect = connect_graphics_control();
+  if (connect == IO_OBJECT_NULL) {
+    return 1;
+  }
+
+  int rv = 0;
   const char* opt = argv[1];
   if (strcmp(opt, "--force-integrated") == 0) {
     if (!is_using_integrated_graphics(connect)) {
@@ -61,9 +62,9 @@ int main(int argc, char* argv[])
   } else {
     puts("gpuctl: Invalid option");
     puts(usage);
-    return 1;
+    rv = 1;
   }
 
   close_graphics_control(connect);
-  return 0;
+  return rv;
 }
