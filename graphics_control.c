@@ -34,7 +34,8 @@ enum
   mux_get_graphics_card = 7
 };
 
-enum {
+enum
+{
   mux_feature_policy = 0
 };
 
@@ -87,12 +88,12 @@ void close_graphics_control(io_connect_t io_connect)
 static bool set_graphics_mux_state(io_connect_t connect, uint32_t action,
                                    uint64_t arg)
 {
-    kern_return_t kr = KERN_SUCCESS;
-    uint64_t scalarI_64[3] = { 1, (uint64_t)action, arg };
-    kr = IOConnectCallScalarMethod(connect,
-                                   graphics_control_method_set_mux_state,
-                                   scalarI_64, 3, NULL, 0);
-    return kr == KERN_SUCCESS;
+  kern_return_t kr = KERN_SUCCESS;
+  uint64_t scalarI_64[3] = { 1, (uint64_t)action, arg };
+  kr = IOConnectCallScalarMethod(connect,
+                                 graphics_control_method_set_mux_state,
+                                 scalarI_64, 3, NULL, 0);
+  return kr == KERN_SUCCESS;
 }
 
 static bool get_graphics_mux_state(io_connect_t connect, uint32_t input,
@@ -109,31 +110,30 @@ static bool get_graphics_mux_state(io_connect_t connect, uint32_t input,
 
 void force_graphics_switch(io_connect_t connect)
 {
-    set_graphics_mux_state(connect, mux_set_force_gpu_switch, 0);
-
+  set_graphics_mux_state(connect, mux_set_force_gpu_switch, 0);
 }
 
 bool is_dynamic_graphics_switching(io_connect_t connect)
 {
-    uint64_t output = 0;
-    get_graphics_mux_state(connect, mux_set_dynamic_switching, &output);
-    return output != 0;
+  uint64_t output = 0;
+  get_graphics_mux_state(connect, mux_set_dynamic_switching, &output);
+  return output != 0;
 }
 
 void set_dynamic_graphics_switching(io_connect_t connect, bool enable)
 {
-    set_graphics_mux_state(connect, mux_set_switch_policy,
-                           enable ? 0 : 2);
-    set_graphics_mux_state(connect, mux_set_dynamic_switching,
-                           (uint64_t)enable);
-    set_graphics_mux_state(connect,
-                           enable ? mux_set_enable_feature : mux_set_disable_feature,
-                           1 << mux_feature_policy);
+  set_graphics_mux_state(connect, mux_set_switch_policy,
+                         enable ? 0 : 2);
+  set_graphics_mux_state(connect, mux_set_dynamic_switching,
+                         (uint64_t)enable);
+  set_graphics_mux_state(connect,
+                         enable ? mux_set_enable_feature : mux_set_disable_feature,
+                         1 << mux_feature_policy);
 }
 
 bool is_using_integrated_graphics(io_connect_t connect)
 {
-    uint64_t output = 0;
-    get_graphics_mux_state(connect, mux_get_graphics_card, &output);
-    return output != 0;
+  uint64_t output = 0;
+  get_graphics_mux_state(connect, mux_get_graphics_card, &output);
+  return output != 0;
 }
