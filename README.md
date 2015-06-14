@@ -10,7 +10,7 @@ older Macs.
 
 ### Run on boot
 
-To run gpuctl on boot, create `/Library/LaunchAgents/com.user.gpuctl.plist` with the following contents:
+To run gpuctl on boot, create `~/Library/LaunchAgents/com.user.gpuctl.plist` with the following contents:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
